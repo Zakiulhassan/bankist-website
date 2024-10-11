@@ -7,9 +7,7 @@ const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
 const nav = document.querySelector('.nav');
-const tabs = document.querySelectorAll('.operations__tab');
-const tabsContainer = document.querySelector('.operations__tab-container');
-const tabsContent = document.querySelectorAll('.operations__content');
+
 
 ///////////////////////////////////////
 // Modal window
@@ -39,18 +37,18 @@ document.addEventListener('keydown', function (e) {
 ///////////////////////////////////////
 // Button scrolling
 btnScrollTo.addEventListener('click', function (e) {
-  const s1coords = section1.getBoundingClientRect();
-  console.log(s1coords);
+//   const s1coords = section1.getBoundingClientRect();
+//   console.log(s1coords);
 
-  console.log(e.target.getBoundingClientRect());
+//   console.log(e.target.getBoundingClientRect());
 
-  console.log('Current scroll (X/Y)', window.pageXOffset, window.pageYOffset);
+//   console.log('Current scroll (X/Y)', window.pageXOffset, window.pageYOffset);
 
-  console.log(
-    'height/width viewport',
-    document.documentElement.clientHeight,
-    document.documentElement.clientWidth
-  );
+//   console.log(
+//     'height/width viewport',
+//     document.documentElement.clientHeight,
+//     document.documentElement.clientWidth
+//   );
 
   // Scrolling
   // window.scrollTo(
@@ -67,3 +65,77 @@ btnScrollTo.addEventListener('click', function (e) {
   section1.scrollIntoView({ behavior: 'smooth' });
 });
 
+//////////////////////////////
+// Page Navigation
+
+// Smooth SCrolling
+
+// document.querySelectorAll(".nav__link").forEach(el => {
+//   el.addEventListener("click", function(e) {
+//     e.preventDefault();
+//     const id = this.getAttribute("href")
+//     document.querySelector(id).scrollIntoView({ behavior: 'smooth' })
+//   })
+// })
+
+
+
+// Smooth Scrolling - Event Delegation
+// 1- Add Event Listener to common parent element
+// 2- Determine what element originated the event
+
+document.querySelector(".nav__links").addEventListener("click", function(e){
+  e.preventDefault()
+
+  // Matching strateg to match elements that are relevant
+  if(e.target.classList.contains("nav__link")) {
+    const id = e.target.getAttribute("href")
+    document.querySelector(id).scrollIntoView({ behavior: 'smooth' })
+  }
+})
+
+///////////////////////////
+// DOM Traversing
+// const h1 = document.querySelector("h1");
+// // Going Downwards
+// console.log(h1.querySelectorAll(".highlight"))
+// console.log(h1.childNodes)
+// console.log(h1.children)
+// h1.firstElementChild.style.color = "red"
+
+// // Going Downwards
+// console.log(h1.parentNode)
+// console.log(h1.parentElement)
+
+// h1.closest(".header").style.background = "var(--gradient-secondary)"
+// h1.closest("h1").style.background = "var(--gradient-secondary)"
+
+// // Going Sideways - siblings
+// console.log(h1.previousElementSibling)
+// console.log(h1.nextElementSibling)
+// console.log(h1.parentElement.children)
+
+
+//////////////////////////////
+// Tabs
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+
+tabsContainer.addEventListener("click", (e) => {
+  // tabs buttons
+  const clicked = e.target.closest(".operations__tab");
+  // Guard Clause
+  if(!clicked) return; //if clicked outside "closest" will be undefined. So return early to break the process
+
+  // Remove active classes
+	tabs.forEach(t=> t.classList.remove("operations__tab--active"))
+  tabsContent.forEach(c=> c.classList.remove("operations__content--active"))
+
+  // Activate tab
+  clicked.classList.add("operations__tab--active")
+
+  // Active content area
+  document.querySelector(`.operations__content--${clicked.dataset.tab}`).classList.add("operations__content--active")
+
+})
